@@ -24,14 +24,17 @@ public class Player : MonoBehaviour
     private Vector3 posInic;
 
     public int contReset;
-    public int contCoin;
+
+    public int contCoin = 0;
+    public int totalCoins = 7; 
+    public bool inimigoDerrotado = false;
 
     void Start()
     {
         posInic = transform.position;
         rig = GetComponent<Rigidbody2D>();
         anime = GetComponent<Animator>();
-        cont = 2; // permite pular logo no início
+        cont = 2; 
     }
 
     void Update()
@@ -123,15 +126,8 @@ public class Player : MonoBehaviour
             Invoke(nameof(ResetFireAnim), 0.2f);
     }
 
-    void ResetFireRunAnim()
-    {
-        anime.SetBool("isFireRun", false);
-    }
-
-    void ResetFireAnim()
-    {
-        anime.SetBool("isFire", false);
-    }
+    void ResetFireRunAnim() => anime.SetBool("isFireRun", false);
+    void ResetFireAnim() => anime.SetBool("isFire", false);
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -156,6 +152,7 @@ public class Player : MonoBehaviour
         {
             contCoin++;
             Destroy(trigger.gameObject);
+            VerificarVitoria();
         }
 
         if (trigger.gameObject.CompareTag("Osso"))
@@ -194,5 +191,13 @@ public class Player : MonoBehaviour
         float x = transform.localScale.x;
         x *= -1;
         transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);
+    }
+
+    public void VerificarVitoria()
+    {
+        if (contCoin == totalCoins && inimigoDerrotado)
+        {
+            GameManager.instance.LoadScene("win"); // carrega a cena de vitória
+        }
     }
 }

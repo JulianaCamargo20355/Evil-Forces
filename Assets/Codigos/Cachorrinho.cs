@@ -2,44 +2,32 @@ using UnityEngine;
 
 public class Cachorrinho : MonoBehaviour
 {
-    public GameObject projet; //bala
-
-    public Transform gatilho; //posição que sai o tiro
-
-    private bool tiro; //imput do tiro 
-
-    public float forcaTiro; //velocidade do projetil
-
-    private bool flipX;
-
-    bool esq = true;
-
+    public GameObject projet; // bala
+    public Transform gatilho; // posição que sai o tiro
+    public float forcaTiro; // velocidade do projetil
     public float moveSpeed;
-
     public float tiroCD;
 
-    bool podeAtirar = false;
-
+    private bool tiro;
+    private bool flipX;
+    private bool esq = true;
+    private bool podeAtirar = false;
 
     void Start()
     {
         Invoke(nameof(ResetarTiro), tiroCD);
     }
 
-
     void Update()
     {
-        if (esq == true)
+        if (esq)
         {
             transform.position += Vector3.left * moveSpeed * Time.deltaTime;
             transform.eulerAngles = new Vector3(0, 180, 0);
 
-            if(podeAtirar == true)
-            {
+            if (podeAtirar)
                 Atirar();
-            }
         }
-
         else
         {
             transform.eulerAngles = Vector3.zero;
@@ -51,26 +39,28 @@ public class Cachorrinho : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Tiro"))
         {
-            Destroy(col.gameObject); // Destruir o tiro
-            Destroy(this.gameObject); // Destruir o inimigo
+            Destroy(col.gameObject); // destruir o tiro
+            Destroy(this.gameObject); // destruir o inimigo
+
+            Player player = FindObjectOfType<Player>();
+            if (player != null)
+            {
+                player.inimigoDerrotado = true;
+                player.VerificarVitoria();
+            }
         }
 
         if (col.gameObject.CompareTag("Esq"))
-        {
             esq = false;
-        }
         if (col.gameObject.CompareTag("Dir"))
-        {
             esq = true;
-        }
     }
 
     void Atirar()
     {
         podeAtirar = false;
 
-        GameObject temp = Instantiate(projet);
-        temp.transform.position = gatilho.position;
+        GameObject temp = Instantiate(projet, gatilho.position, Quaternion.identity);
         temp.GetComponent<Rigidbody2D>().velocity = new Vector2(forcaTiro, 0);
         Destroy(temp, 3f);
 
@@ -79,6 +69,6 @@ public class Cachorrinho : MonoBehaviour
 
     void ResetarTiro()
     {
-        podeAtirar = true;     
+        podeAtirar = true;
     }
 }
