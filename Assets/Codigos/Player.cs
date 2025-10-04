@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     public int contReset;
 
     public int contCoin = 0;
-    public int totalCoins = 7; 
+    public int totalCoins = 5; 
     public bool inimigoDerrotado = false;
 
     void Start()
