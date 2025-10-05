@@ -65,5 +65,3 @@ https://play.unity.com/en/games/3540197e-cd50-4950-a5f3-da3cdc11decc/evil-forces
 ### Observações
 - O projeto utiliza Unity **2022.3.45f1**  
 - As animações do personagem respondem aos estados definidos na MEF
-
-- 
